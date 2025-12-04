@@ -1,0 +1,7 @@
+{
+  "name": "Henry's Studio",
+  "description": "Award Winning Photographer Henry Wei helps you take professional studio photos in seconds",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
