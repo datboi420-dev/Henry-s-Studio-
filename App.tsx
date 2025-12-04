@@ -6,14 +6,14 @@ import PreviewEditor from './components/PreviewEditor';
 import ResultView from './components/ResultView';
 import HistoryView from './components/HistoryView';
 import { generateProductImage, isolateProduct } from './services/geminiService';
-import { SparklesIcon, ClockIcon } from './components/Icons';
+import { SparklesIcon, ClockIcon, CameraIcon } from './components/Icons';
 import { APP_NAME } from './constants';
 
 const HISTORY_STORAGE_KEY = 'henrys_studio_history';
 const MAX_HISTORY_ITEMS = 10; // Limit to prevent localStorage overflow
 
 const App = () => {
-  // 'HOME' now represents the Camera + History view
+  // 'HOME' is now the Landing/Get Started screen
   const [appState, setAppState] = useState<AppState>('HOME');
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [processedImage, setProcessedImage] = useState<string | null>(null);
@@ -48,6 +48,11 @@ const App = () => {
     }
   };
 
+  // Action: Start App from Landing
+  const handleStart = () => {
+    setAppState('CAMERA');
+  };
+
   // Transition: Capture Photo
   const handleCapture = (imageData: string) => {
     setCapturedImage(imageData);
@@ -58,7 +63,7 @@ const App = () => {
   const handleRetake = () => {
     setCapturedImage(null);
     setProcessedImage(null);
-    setAppState('HOME');
+    setAppState('CAMERA');
   };
 
   // Action: Isolate Product (Remove background/hands in preview)
@@ -158,6 +163,13 @@ const App = () => {
     setCapturedImage(null);
     setProcessedImage(null);
   };
+  
+  // Transition: Go to Camera
+  const handleGoToCamera = () => {
+      setAppState('CAMERA');
+      setCapturedImage(null);
+      setProcessedImage(null);
+  }
 
   // History Actions
   const handleClearHistory = () => {
@@ -205,7 +217,50 @@ const App = () => {
 
   return (
     <div className="h-full w-full max-w-md mx-auto relative bg-black shadow-2xl overflow-hidden flex flex-col">
+      
+      {/* Landing Page */}
       {appState === 'HOME' && (
+        <div className="flex-1 flex flex-col items-center justify-center p-8 bg-gradient-to-br from-gray-900 to-black text-center relative overflow-hidden">
+          
+          {/* Decorative Elements */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+
+          <div className="z-10 flex flex-col items-center">
+            <div className="w-20 h-20 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center mb-6 shadow-xl rotate-3">
+              <CameraIcon className="w-10 h-10 text-white" />
+            </div>
+            
+            <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">{APP_NAME}</h1>
+            <p className="text-gray-400 text-lg mb-10 max-w-xs leading-relaxed">
+              Turn your products into professional studio shots in seconds.
+            </p>
+
+            <button 
+              onClick={handleStart}
+              className="w-full max-w-xs py-4 bg-white text-black font-bold text-lg rounded-2xl flex items-center justify-center gap-2 active:bg-gray-200 transition-all hover:scale-105 shadow-lg shadow-white/10"
+            >
+              Start Creating
+            </button>
+            
+            {history.length > 0 && (
+                <button 
+                    onClick={() => setAppState('HISTORY')}
+                    className="mt-6 text-gray-500 text-sm font-medium hover:text-white transition-colors"
+                >
+                    View Gallery ({history.length})
+                </button>
+            )}
+          </div>
+          
+          <div className="absolute bottom-8 text-gray-600 text-xs">
+             Powered by Gemini AI
+          </div>
+        </div>
+      )}
+
+      {/* Camera & History Interface */}
+      {appState === 'CAMERA' && (
         <>
           {/* Main Camera Area */}
           <div className="flex-1 relative rounded-b-[2.5rem] overflow-hidden z-10 shadow-2xl bg-gray-900 border-b border-gray-800">
@@ -213,10 +268,17 @@ const App = () => {
             
             {/* App Title Overlay */}
             <div className="absolute top-6 left-0 right-0 text-center pointer-events-none">
-              <span className="bg-black/40 backdrop-blur-md text-white/90 text-sm font-semibold px-4 py-1.5 rounded-full shadow-sm">
-                {APP_NAME}
+              <span className="bg-black/40 backdrop-blur-md text-white/90 text-xs font-bold tracking-wider uppercase px-4 py-1.5 rounded-full shadow-sm">
+                Live Studio
               </span>
             </div>
+
+            <button 
+              onClick={handleHome}
+              className="absolute top-6 left-4 z-20 bg-black/40 backdrop-blur-md text-white p-2 rounded-full"
+            >
+              <ChevronLeftIcon className="w-5 h-5" />
+            </button>
           </div>
 
           {/* History Strip */}
@@ -235,7 +297,7 @@ const App = () => {
              
              {history.length === 0 ? (
                <div className="flex-1 flex items-center justify-center border border-dashed border-gray-800 rounded-xl">
-                 <p className="text-gray-600 text-xs">No photos yet. Start capturing!</p>
+                 <p className="text-gray-600 text-xs">No photos yet.</p>
                </div>
              ) : (
                <div className="flex gap-3 overflow-x-auto no-scrollbar items-center h-full">
@@ -279,7 +341,7 @@ const App = () => {
           originalPreset={selectedPreset}
           currentAspectRatio={selectedRatio}
           onBack={handleBackToEdit}
-          onHome={handleHome}
+          onHome={handleGoToCamera}
           onRegenerate={handleRegenerate}
         />
       )}
@@ -287,7 +349,7 @@ const App = () => {
       {appState === 'HISTORY' && (
         <HistoryView 
           history={history}
-          onBack={handleHome}
+          onBack={handleGoToCamera}
           onSelect={handleSelectHistoryItem}
           onClear={handleClearHistory}
         />
@@ -295,5 +357,12 @@ const App = () => {
     </div>
   );
 };
+
+// Simple Chevron for local use
+const ChevronLeftIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+  </svg>
+);
 
 export default App;
