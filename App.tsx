@@ -216,29 +216,80 @@ const App = () => {
   }
 
   return (
-    <div className="h-full w-full max-w-md mx-auto relative bg-black shadow-2xl overflow-hidden flex flex-col">
+    <div className="h-full w-full max-w-md mx-auto relative bg-black shadow-2xl overflow-hidden flex flex-col" style={{ minHeight: '100vh', height: '100%' }}>
       
       {/* Landing Page */}
       {appState === 'HOME' && (
-        <div className="flex-1 flex flex-col items-center justify-center p-8 bg-gradient-to-br from-gray-900 to-black text-center relative overflow-hidden">
+        <div className="flex-1 flex flex-col items-center justify-center p-8 text-center relative overflow-hidden" style={{ 
+          minHeight: '100%', 
+          width: '100%',
+          background: 'linear-gradient(to bottom right, #111827, #000000)'
+        }}>
           
           {/* Decorative Elements */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            width: '256px',
+            height: '256px',
+            background: 'rgba(99, 102, 241, 0.1)',
+            borderRadius: '50%',
+            filter: 'blur(64px)',
+            transform: 'translate(50%, -50%)'
+          }}></div>
+          <div style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            width: '256px',
+            height: '256px',
+            background: 'rgba(168, 85, 247, 0.1)',
+            borderRadius: '50%',
+            filter: 'blur(64px)',
+            transform: 'translate(-50%, 50%)'
+          }}></div>
 
-          <div className="z-10 flex flex-col items-center">
-            <div className="w-20 h-20 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center mb-6 shadow-xl rotate-3">
+          <div className="z-10 flex flex-col items-center" style={{ position: 'relative', zIndex: 10 }}>
+            <div style={{
+              width: '80px',
+              height: '80px',
+              background: 'linear-gradient(to top right, #6366f1, #a855f7)',
+              borderRadius: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '24px',
+              boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+              transform: 'rotate(3deg)'
+            }}>
               <CameraIcon className="w-10 h-10 text-white" />
             </div>
             
-            <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">{APP_NAME}</h1>
-            <p className="text-gray-400 text-lg mb-10 max-w-xs leading-relaxed">
+            <h1 style={{ fontSize: '36px', fontWeight: 'bold', color: 'white', marginBottom: '8px', letterSpacing: '-0.025em' }}>{APP_NAME}</h1>
+            <p style={{ color: '#9ca3af', fontSize: '18px', marginBottom: '40px', maxWidth: '320px', lineHeight: '1.625' }}>
               Turn your products into professional studio shots in seconds.
             </p>
 
             <button 
               onClick={handleStart}
-              className="w-full max-w-xs py-4 bg-white text-black font-bold text-lg rounded-2xl flex items-center justify-center gap-2 active:bg-gray-200 transition-all hover:scale-105 shadow-lg shadow-white/10"
+              style={{
+                width: '100%',
+                maxWidth: '320px',
+                padding: '16px',
+                background: 'white',
+                color: 'black',
+                fontWeight: 'bold',
+                fontSize: '18px',
+                borderRadius: '16px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                border: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 10px 15px -3px rgba(255, 255, 255, 0.1)'
+              }}
             >
               Start Creating
             </button>
@@ -246,14 +297,22 @@ const App = () => {
             {history.length > 0 && (
                 <button 
                     onClick={() => setAppState('HISTORY')}
-                    className="mt-6 text-gray-500 text-sm font-medium hover:text-white transition-colors"
+                    style={{
+                      marginTop: '24px',
+                      color: '#6b7280',
+                      fontSize: '14px',
+                      fontWeight: '500',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer'
+                    }}
                 >
                     View Gallery ({history.length})
                 </button>
             )}
           </div>
           
-          <div className="absolute bottom-8 text-gray-600 text-xs">
+          <div style={{ position: 'absolute', bottom: '32px', color: '#4b5563', fontSize: '12px' }}>
              Powered by Gemini AI
           </div>
         </div>
