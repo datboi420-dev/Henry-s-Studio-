@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-screen">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -7,7 +7,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       /* iOS-like smooth scrolling and tap highlight removal */
-      body {
+      html, body {
+        margin: 0;
+        padding: 0;
         -webkit-tap-highlight-color: transparent;
         overscroll-behavior-y: none;
       }
@@ -20,18 +22,9 @@
         scrollbar-width: none;
       }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.31.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
-    "react": "https://aistudiocdn.com/react@^19.2.1",
-    "react/": "https://aistudiocdn.com/react@^19.2.1/"
-  }
-}
-</script>
 </head>
   <body class="bg-black text-white antialiased h-screen w-screen overflow-hidden select-none">
-    <div id="root" class="h-full w-full"></div>
+    <div id="root" class="h-full w-full" style="height: 100vh; width: 100vw;"></div>
+    <script type="module" src="/index.tsx"></script>
   </body>
 </html>
